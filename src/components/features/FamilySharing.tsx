@@ -7,6 +7,16 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { toast } from 'sonner';
 import { MOCK_FAMILIES } from '@/mock/data';
+import { ServiceIcon } from '@/components/ui/ServiceIcon';
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetClose,
+} from "@/components/ui/sheet";
+
+type Family = typeof MOCK_FAMILIES[0] & { isJoined?: boolean };
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -19,16 +29,29 @@ const itemVariants = {
 };
 
 export function FamilySharing() {
-    const [families, setFamilies] = useState(MOCK_FAMILIES);
+    const [families, setFamilies] = useState<Family[]>(MOCK_FAMILIES);
+    const [selectedFamily, setSelectedFamily] = useState<Family | null>(null);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-    const handleJoin = (id: string, service: string) => {
-        toast.success(`Вы присоединились к семье ${service}! 🎉`, {
+    const handleJoinClick = (family: Family) => {
+        setSelectedFamily(family);
+        setIsSheetOpen(true);
+    };
+
+    const handleConfirmJoin = () => {
+        if (!selectedFamily) return;
+
+        toast.success(`Вы присоединились к семье Алины! 🎉`, {
             description: 'Доступ будет открыт в течение 5 минут.',
         });
+
         setFamilies(families.map((f) => {
-            if (f.id === id) return { ...f, used: f.used + 1, isJoined: true };
+            if (f.id === selectedFamily.id) return { ...f, used: f.used + 1, isJoined: true };
             return f;
         }));
+
+        setIsSheetOpen(false);
+        setSelectedFamily(null);
     };
 
     return (
@@ -60,9 +83,7 @@ export function FamilySharing() {
                                 <CardHeader className="pb-4 border-b border-border/50">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-white p-2">
-                                                <img src={family.icon} alt={family.service} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-                                            </div>
+                                            <ServiceIcon name={family.service} size={32} />
                                             <div>
                                                 <CardTitle className="text-lg">{family.service}</CardTitle>
                                                 <p className="text-xs text-muted-foreground">Владелец: {family.owner}</p>
@@ -120,7 +141,7 @@ export function FamilySharing() {
                                         <Button
                                             className="w-full"
                                             disabled={isFull}
-                                            onClick={() => handleJoin(family.id, family.service)}
+                                            onClick={() => handleJoinClick(family as any)}
                                         >
                                             {isFull ? 'Мест нет' : `Вступить за $${family.pricePerSlot.toFixed(2)}`}
                                         </Button>
@@ -131,6 +152,76 @@ export function FamilySharing() {
                     );
                 })}
             </div>
+
+            {/* Confirmation Sheet */}
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                <SheetContent side="bottom" className="sm:side-right sm:max-w-md rounded-t-3xl sm:rounded-l-3xl p-8">
+                    {selectedFamily && (
+                        <div className="space-y-8">
+                            <SheetHeader className="text-left space-y-4">
+                                <div className="flex items-center gap-4">
+                                    <ServiceIcon name={selectedFamily.service} size={64} />
+                                    <div>
+                                        <SheetTitle className="text-2xl">{selectedFamily.service}</SheetTitle>
+                                        <p className="text-muted-foreground">Владелец: {selectedFamily.owner}</p>
+                                    </div>
+                                </div>
+                            </SheetHeader>
+
+                            <div className="space-y-6">
+                                <div>
+                                    <h4 className="text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wider">Участники</h4>
+                                    <div className="flex -space-x-3">
+                                        {Array.from({ length: selectedFamily.used }).map((_, i) => (
+                                            <Avatar key={i} className="border-2 border-background w-10 h-10">
+                                                <AvatarImage src={`https://i.pravatar.cc/100?u=${selectedFamily.id}_${i}`} />
+                                                <AvatarFallback>U</AvatarFallback>
+                                            </Avatar>
+                                        ))}
+                                        {Array.from({ length: selectedFamily.slots - selectedFamily.used }).map((_, i) => (
+                                            <div key={`empty-${i}`} className="w-10 h-10 rounded-full border-2 border-dashed border-muted-foreground/30 flex items-center justify-center bg-muted/50">
+                                                <PlusCircle className="w-4 h-4 text-muted-foreground/50" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="p-6 bg-primary/5 rounded-2xl border border-primary/10">
+                                    <div className="flex justify-between items-end">
+                                        <div>
+                                            <p className="text-sm text-muted-foreground mb-1">Ваша цена</p>
+                                            <div className="text-3xl font-display font-semibold text-primary">
+                                                ${selectedFamily.pricePerSlot.toFixed(2)}
+                                                <span className="text-sm font-normal text-muted-foreground block">в месяц</span>
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-sm text-muted-foreground mb-1">Свободно мест</p>
+                                            <div className="text-xl font-medium">
+                                                {selectedFamily.slots - selectedFamily.used} из {selectedFamily.slots}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 pt-4">
+                                <Button
+                                    className="w-full h-14 text-lg font-semibold shadow-xl shadow-primary/20"
+                                    onClick={handleConfirmJoin}
+                                >
+                                    Подтвердить за ${selectedFamily.pricePerSlot.toFixed(2)}/мес
+                                </Button>
+                                <SheetClose asChild>
+                                    <Button variant="ghost" className="w-full text-muted-foreground hover:text-foreground">
+                                        Отмена
+                                    </Button>
+                                </SheetClose>
+                            </div>
+                        </div>
+                    )}
+                </SheetContent>
+            </Sheet>
 
             {/* FAB for mobile */}
             <Button className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg shadow-primary/25 md:hidden" size="icon">

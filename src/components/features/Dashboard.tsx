@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingDown, CreditCard, Activity, ArrowRight, XCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { MOCK_SUBSCRIPTIONS } from '@/mock/data';
+import { ServiceIcon } from '@/components/ui/ServiceIcon';
+import { cn } from '@/lib/utils';
+import { useCountUp } from '@/hooks/useCountUp';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -21,28 +24,11 @@ const itemVariants = {
 };
 
 export function Dashboard() {
-    const [spentMonth, setSpentMonth] = useState(0);
     const [subs, setSubs] = useState(MOCK_SUBSCRIPTIONS);
     const unusedTotal = subs.filter(s => s.isUnused).reduce((acc, curr) => acc + curr.price, 0);
 
-    // Animated counter effect (simple version)
-    useEffect(() => {
-        const target = 147.90; // mock total
-        const duration = 1500;
-        const steps = 60;
-        const stepTime = Math.abs(Math.floor(duration / steps));
-        let current = 0;
-        const timer = setInterval(() => {
-            current += target / steps;
-            if (current >= target) {
-                setSpentMonth(target);
-                clearInterval(timer);
-            } else {
-                setSpentMonth(current);
-            }
-        }, stepTime);
-        return () => clearInterval(timer);
-    }, []);
+    const spentMonthAnimated = useCountUp(147.90);
+    const unusedTotalAnimated = useCountUp(unusedTotal);
 
     const handleCancel = (id: string, name: string, price: number) => {
         toast.success(`Подписка ${name} отменена 🎉`, {
@@ -69,7 +55,7 @@ export function Dashboard() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-5xl font-display font-medium mb-4 flex items-end gap-2">
-                            ${spentMonth.toFixed(2)}
+                            ${spentMonthAnimated.toFixed(2)}
                             <span className="text-xl text-muted-foreground mb-1">/мес</span>
                         </div>
 
@@ -91,7 +77,7 @@ export function Dashboard() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-4xl font-display font-medium text-emerald-500">
-                            ${unusedTotal.toFixed(2)}
+                            ${unusedTotalAnimated.toFixed(2)}
                         </div>
                         <p className="text-sm text-muted-foreground mt-2">
                             Отмените неактивные сервисы сейчас
@@ -105,18 +91,22 @@ export function Dashboard() {
                 <div className="flex items-center justify-between">
                     <h2 className="text-lg font-semibold tracking-tight">Календарь платежей (ближайшие 7 дней)</h2>
                 </div>
-                <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
-                    {subs.slice(0, 5).map((sub, i) => (
-                        <Card key={sub.id} className="min-w-[200px] snap-start hover:border-primary/30 transition-colors">
+                <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                    {subs.slice(0, 5).map((sub) => (
+                        <Card key={sub.id} className="min-w-[140px] flex-shrink-0 hover:border-primary/30 transition-colors">
                             <CardContent className="p-4 flex flex-col items-center text-center space-y-3">
-                                <div className={`p-3 rounded-2xl ${sub.color}`}>
-                                    <img src={sub.icon} alt={sub.name} className="w-8 h-8 rounded-lg" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-                                </div>
+                                <ServiceIcon name={sub.name} size={32} />
                                 <div>
-                                    <div className="font-semibold">{sub.name}</div>
-                                    <div className="text-xs text-muted-foreground">{sub.nextPayment}</div>
+                                    <div className="font-semibold text-sm truncate w-full">{sub.name}</div>
+                                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{sub.nextPayment}</div>
                                 </div>
-                                <Badge variant={i === 0 ? 'destructive' : 'secondary'} className="font-mono">
+                                <Badge
+                                    variant="secondary"
+                                    className={cn(
+                                        "font-mono text-[10px] px-1.5 py-0",
+                                        sub.isUnused ? "bg-red-500/20 text-red-400 border-red-500/20" : "bg-secondary text-muted-foreground"
+                                    )}
+                                >
                                     ${sub.price}
                                 </Badge>
                             </CardContent>
@@ -135,9 +125,7 @@ export function Dashboard() {
                                 <CardContent className="p-0 flex-1">
                                     <div className="p-5 flex items-start justify-between gap-4">
                                         <div className="flex items-center gap-4">
-                                            <div className={`p-2.5 rounded-xl ${sub.color}`}>
-                                                <img src={sub.icon} alt={sub.name} className="w-8 h-8 rounded-lg bg-white" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-                                            </div>
+                                            <ServiceIcon name={sub.name} size={32} />
                                             <div>
                                                 <h3 className="font-semibold text-lg">{sub.name}</h3>
                                                 <div className="font-display font-medium text-muted-foreground">${sub.price}/мес</div>

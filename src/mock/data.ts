@@ -30,6 +30,16 @@ export type B2BAlert = {
     avatar: string;
 };
 
+export type Employee = {
+    id: string;
+    name: string;
+    email: string;
+    tool: string;
+    lastActive: string;
+    status: 'active' | 'inactive' | 'fired';
+    avatar: string;
+};
+
 export type CollabOffer = {
     id: string;
     from: string;
@@ -38,6 +48,7 @@ export type CollabOffer = {
     freeMonths: number;
     fromIcon: string;
     toIcon: string;
+    category: string;
 };
 
 export const MOCK_SUBSCRIPTIONS: Subscription[] = [
@@ -55,13 +66,23 @@ export const MOCK_FAMILIES: FamilyPlan[] = [
 ];
 
 export const MOCK_B2B_ALERTS: B2BAlert[] = [
-    { id: '1', employee: "Максим Р.", tool: "Figma", daysInactive: 30, cost: 15, status: 'sleeping', avatar: "https://i.pravatar.cc/40?u=maksim" },
-    { id: '2', employee: "Жанна К.", tool: "Slack Pro", daysInactive: 45, cost: 8.75, status: 'sleeping', avatar: "https://i.pravatar.cc/40?u=zhanna" },
-    { id: '3', employee: "Иван П.", tool: "Notion", daysInactive: 60, cost: 8, status: "fired", avatar: "https://i.pravatar.cc/40?u=ivan" },
+    { id: '1', employee: "Максим Р.", tool: "Figma", daysInactive: 30, cost: 15, status: 'sleeping', avatar: "https://i.pravatar.cc/100?u=maksim" },
+    { id: '2', employee: "Жанна К.", tool: "Slack Pro", daysInactive: 45, cost: 8.75, status: 'sleeping', avatar: "https://i.pravatar.cc/100?u=zhanna" },
+    { id: '3', employee: "Иван П.", tool: "Notion", daysInactive: 60, cost: 8, status: "fired", avatar: "https://i.pravatar.cc/100?u=ivan" },
+];
+
+export const MOCK_EMPLOYEES: Employee[] = [
+    { id: '1', name: "Максим Р.", email: "m.rybakov@company.com", tool: "Figma", lastActive: "30 дней назад", status: 'inactive', avatar: "https://i.pravatar.cc/100?u=maksim" },
+    { id: '2', name: "Жанна К.", email: "zh.kim@company.com", tool: "Slack Pro", lastActive: "45 дней назад", status: 'inactive', avatar: "https://i.pravatar.cc/100?u=zhanna" },
+    { id: '3', name: "Иван П.", email: "i.petrov@company.com", tool: "Notion", lastActive: "60 дней назад", status: 'fired', avatar: "https://i.pravatar.cc/100?u=ivan" },
+    { id: '4', name: "Анна С.", email: "a.svetlova@company.com", tool: "Jira", lastActive: "Сегодня", status: 'active', avatar: "https://i.pravatar.cc/100?u=anna" },
+    { id: '5', name: "Олег В.", email: "o.volkov@company.com", tool: "GitHub", lastActive: "2 часа назад", status: 'active', avatar: "https://i.pravatar.cc/100?u=oleg" },
+    { id: '6', name: "Елена Д.", email: "e.danilova@company.com", tool: "Zoom", lastActive: "Вчера", status: 'active', avatar: "https://i.pravatar.cc/100?u=elena" },
+    { id: '7', name: "Артем Г.", email: "a.gromov@company.com", tool: "Linear", lastActive: "3 часа назад", status: 'active', avatar: "https://i.pravatar.cc/100?u=artem" },
 ];
 
 export const MOCK_COLLABS: CollabOffer[] = [
-    { id: '1', from: "Netflix", to: "Okko", saving: "$5.99", freeMonths: 1, fromIcon: "https://logo.clearbit.com/netflix.com", toIcon: "https://logo.clearbit.com/okko.tv" },
-    { id: '2', from: "Adobe CC", to: "Canva Pro", saving: "$54.99", freeMonths: 2, fromIcon: "https://logo.clearbit.com/adobe.com", toIcon: "https://logo.clearbit.com/canva.com" },
-    { id: '3', from: "Spotify", to: "Yandex Music", saving: "$4.99", freeMonths: 3, fromIcon: "https://logo.clearbit.com/spotify.com", toIcon: "https://logo.clearbit.com/music.yandex.ru" },
+    { id: '1', from: "Netflix", to: "Okko", saving: "$5.99", freeMonths: 1, fromIcon: "https://logo.clearbit.com/netflix.com", toIcon: "https://logo.clearbit.com/okko.tv", category: "Стриминг" },
+    { id: '2', from: "Adobe CC", to: "Canva Pro", saving: "$54.99", freeMonths: 2, fromIcon: "https://logo.clearbit.com/adobe.com", toIcon: "https://logo.clearbit.com/canva.com", category: "Продуктивность" },
+    { id: '3', from: "Spotify", to: "Yandex Music", saving: "$4.99", freeMonths: 3, fromIcon: "https://logo.clearbit.com/spotify.com", toIcon: "https://logo.clearbit.com/music.yandex.ru", category: "Музыка" },
 ];
