@@ -147,12 +147,12 @@ export function Marketplace() {
                                 <p className="text-sm text-muted-foreground text-center">Используйте этот промокод при регистрации в {selectedOffer.to}:</p>
                                 <div className="flex items-center gap-2 p-4 bg-muted rounded-xl border-2 border-dashed border-primary/20">
                                     <code className="flex-1 text-center font-mono text-lg font-bold tracking-wider">
-                                        SUBMAN-{selectedOffer.to.toUpperCase()}-A3F7
+                                        {selectedOffer.promo ?? `SUBMAN-${selectedOffer.to.toUpperCase()}-A3F7`}
                                     </code>
                                     <Button
                                         size="icon"
                                         variant="ghost"
-                                        onClick={() => copyToClipboard(`SUBMAN-${selectedOffer.to.toUpperCase()}-A3F7`)}
+                                        onClick={() => copyToClipboard(selectedOffer.promo ?? `SUBMAN-${selectedOffer.to.toUpperCase()}-A3F7`)}
                                     >
                                         <Copy className="w-4 h-4" />
                                     </Button>

@@ -9,7 +9,12 @@ export const SERVICE_ICONS: Record<string, string> = {
 
     // B2B
     "Figma": "https://cdn.simpleicons.org/figma",
+    "Slack": "https://cdn.simpleicons.org/slack",
     "Slack Pro": "https://cdn.simpleicons.org/slack",
+    "Jira": "https://cdn.simpleicons.org/jira",
+    "GitHub": "https://cdn.simpleicons.org/github/ffffff",
+    "Zoom": "https://cdn.simpleicons.org/zoom",
+    "Linear": "https://cdn.simpleicons.org/linear/ffffff",
 
     // Family
     "Spotify": "https://cdn.simpleicons.org/spotify",
@@ -20,6 +25,8 @@ export const SERVICE_ICONS: Record<string, string> = {
     "Canva Pro": "https://cdn.simpleicons.org/canva",
     "Okko": "https://logo.clearbit.com/okko.tv",
     "Yandex Music": "https://logo.clearbit.com/music.yandex.ru",
+    "Google Meet": "https://cdn.simpleicons.org/googlemeet",
+    "GitLab": "https://cdn.simpleicons.org/gitlab",
 };
 
 export function getServiceIcon(name: string): string {

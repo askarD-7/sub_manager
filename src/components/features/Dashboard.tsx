@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { MOCK_SUBSCRIPTIONS } from '@/mock/data';
+import { MOCK_SUBSCRIPTIONS, MOCK_CALENDAR } from '@/mock/data';
 import { ServiceIcon } from '@/components/ui/ServiceIcon';
 import { cn } from '@/lib/utils';
 import { useCountUp } from '@/hooks/useCountUp';
@@ -22,6 +22,11 @@ const itemVariants = {
     hidden: { opacity: 0, y: 16 },
     show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
 };
+
+function formatCalDate(dateStr: string): string {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' }).replace('.', '');
+}
 
 export function Dashboard() {
     const [subs, setSubs] = useState(MOCK_SUBSCRIPTIONS);
@@ -92,22 +97,22 @@ export function Dashboard() {
                     <h2 className="text-lg font-semibold tracking-tight">Календарь платежей (ближайшие 7 дней)</h2>
                 </div>
                 <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                    {subs.slice(0, 5).map((sub) => (
-                        <Card key={sub.id} className="min-w-[140px] flex-shrink-0 hover:border-primary/30 transition-colors">
+                    {MOCK_CALENDAR.map((cal) => (
+                        <Card key={cal.id} className="min-w-[140px] flex-shrink-0 hover:border-primary/30 transition-colors">
                             <CardContent className="p-4 flex flex-col items-center text-center space-y-3">
-                                <ServiceIcon name={sub.name} size={32} />
+                                <ServiceIcon name={cal.service} size={32} />
                                 <div>
-                                    <div className="font-semibold text-sm truncate w-full">{sub.name}</div>
-                                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{sub.nextPayment}</div>
+                                    <div className="font-semibold text-sm truncate w-full">{cal.service}</div>
+                                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{formatCalDate(cal.date)}</div>
                                 </div>
                                 <Badge
                                     variant="secondary"
                                     className={cn(
                                         "font-mono text-[10px] px-1.5 py-0",
-                                        sub.isUnused ? "bg-red-500/20 text-red-400 border-red-500/20" : "bg-secondary text-muted-foreground"
+                                        cal.isUnused ? "bg-red-500/20 text-red-400 border-red-500/20" : "bg-secondary text-muted-foreground"
                                     )}
                                 >
-                                    ${sub.price}
+                                    ${cal.amount}
                                 </Badge>
                             </CardContent>
                         </Card>
