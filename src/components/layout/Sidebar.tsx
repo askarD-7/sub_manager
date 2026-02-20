@@ -67,11 +67,11 @@ export function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: SidebarP
                         onClick={() => { setActiveTab('settings'); setIsOpen(false); }}
                     >
                         <Avatar className="h-9 w-9 border border-primary/20">
-                            <AvatarImage src="https://i.pravatar.cc/150?u=current_user" />
-                            <AvatarFallback>AK</AvatarFallback>
+                            <AvatarImage src="" />
+                            <AvatarFallback>A</AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col text-left">
-                            <span className="text-sm font-medium">Аскар К.</span>
+                            <span className="text-sm font-medium">Askar</span>
                             <span className="text-xs text-muted-foreground">Pro Plan</span>
                         </div>
                         <Settings2 className="w-4 h-4 text-muted-foreground ml-auto" />

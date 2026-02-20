@@ -76,11 +76,11 @@ function Field({
 // ─── Sections ────────────────────────────────────────────────────────────────
 
 function ProfileSection() {
-    const [name, setName] = useState('Аскар Кенжебаев');
+    const [name, setName] = useState('Askar');
     const [email, setEmail] = useState('askar@example.com');
     const [phone, setPhone] = useState('+7 777 777 7777');
     const [currency, setCurrency] = useState('USD');
-    const [avatar, setAvatar] = useState('https://i.pravatar.cc/150?u=current_user');
+    const [avatar, setAvatar] = useState('');
     const fileRef = useRef<HTMLInputElement>(null);
 
     const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +102,7 @@ function ProfileSection() {
                 <div className="relative">
                     <Avatar className="w-20 h-20 border-2 border-primary/20">
                         <AvatarImage src={avatar} />
-                        <AvatarFallback className="text-2xl">АК</AvatarFallback>
+                        <AvatarFallback className="text-2xl">A</AvatarFallback>
                     </Avatar>
                     <button
                         onClick={() => fileRef.current?.click()}

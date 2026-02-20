@@ -63,7 +63,7 @@ export function CreateFamilyModal({ open, onOpenChange, onCreated }: Props) {
     const handlePublish = () => {
         onCreated({
             service,
-            owner: 'Аскар К.',
+            owner: 'Askar',
             slots,
             used: 1,
             pricePerSlot: parseFloat(pricePerSlot),
@@ -152,7 +152,7 @@ export function CreateFamilyModal({ open, onOpenChange, onCreated }: Props) {
                                     <ServiceIcon name={service} size={36} />
                                     <div>
                                         <div className="font-semibold">{service}</div>
-                                        <div className="text-xs text-muted-foreground">Владелец: Аскар К.</div>
+                                        <div className="text-xs text-muted-foreground">Владелец: Askar</div>
                                     </div>
                                 </div>
 
@@ -225,7 +225,7 @@ export function CreateFamilyModal({ open, onOpenChange, onCreated }: Props) {
                                         <ServiceIcon name={service} size={52} />
                                         <div>
                                             <div className="text-xl font-semibold">{service}</div>
-                                            <div className="text-sm text-muted-foreground">Аскар К. • {slots} мест</div>
+                                            <div className="text-sm text-muted-foreground">Askar • {slots} мест</div>
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">

@@ -51,8 +51,8 @@ export function Header({ activeTab, setIsOpen, setActiveTab }: HeaderProps) {
                     className="h-8 w-8 cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all"
                     onClick={() => setActiveTab?.('settings')}
                 >
-                    <AvatarImage src="https://i.pravatar.cc/150?u=current_user" />
-                    <AvatarFallback>AK</AvatarFallback>
+                    <AvatarImage src="" />
+                    <AvatarFallback>A</AvatarFallback>
                 </Avatar>
             </div>
         </header>
