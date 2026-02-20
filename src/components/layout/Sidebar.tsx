@@ -1,4 +1,4 @@
-import { Home, Users, Briefcase, Gift } from 'lucide-react';
+import { Home, Users, Briefcase, Gift, Settings2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 type SidebarProps = {
@@ -13,6 +13,7 @@ const navItems = [
     { id: 'family', label: 'Семья', icon: Users },
     { id: 'b2b', label: 'Бизнес', icon: Briefcase },
     { id: 'marketplace', label: 'Маркетплейс', icon: Gift },
+    { id: 'settings', label: 'Профиль', icon: Settings2 },
 ];
 
 export function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: SidebarProps) {
@@ -61,7 +62,10 @@ export function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: SidebarP
                 </nav>
 
                 <div className="p-4 border-t border-border mt-auto">
-                    <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors">
+                    <button
+                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors text-left"
+                        onClick={() => { setActiveTab('settings'); setIsOpen(false); }}
+                    >
                         <Avatar className="h-9 w-9 border border-primary/20">
                             <AvatarImage src="https://i.pravatar.cc/150?u=current_user" />
                             <AvatarFallback>AK</AvatarFallback>
@@ -70,7 +74,8 @@ export function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: SidebarP
                             <span className="text-sm font-medium">Аскар К.</span>
                             <span className="text-xs text-muted-foreground">Pro Plan</span>
                         </div>
-                    </div>
+                        <Settings2 className="w-4 h-4 text-muted-foreground ml-auto" />
+                    </button>
                 </div>
             </aside>
         </>

@@ -4,6 +4,7 @@ import { Dashboard } from './components/features/Dashboard';
 import { FamilySharing } from './components/features/FamilySharing';
 import { B2BAudit } from './components/features/B2BAudit';
 import { Marketplace } from './components/features/Marketplace';
+import { ProfileSettings } from './components/features/ProfileSettings';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -18,6 +19,8 @@ function App() {
         return <B2BAudit />;
       case 'marketplace':
         return <Marketplace />;
+      case 'settings':
+        return <ProfileSettings />;
       default:
         return <Dashboard />;
     }
@@ -33,3 +36,4 @@ function App() {
 }
 
 export default App;
+

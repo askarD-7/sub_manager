@@ -5,10 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { MOCK_SUBSCRIPTIONS, MOCK_CALENDAR } from '@/mock/data';
+import { MOCK_SUBSCRIPTIONS, MOCK_CALENDAR, type Subscription } from '@/mock/data';
 import { ServiceIcon } from '@/components/ui/ServiceIcon';
 import { cn } from '@/lib/utils';
 import { useCountUp } from '@/hooks/useCountUp';
+import { SubscriptionSettingsSheet } from '@/components/features/SubscriptionSettingsSheet';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -30,16 +31,27 @@ function formatCalDate(dateStr: string): string {
 
 export function Dashboard() {
     const [subs, setSubs] = useState(MOCK_SUBSCRIPTIONS);
+    const [selectedSub, setSelectedSub] = useState<Subscription | null>(null);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
     const unusedTotal = subs.filter(s => s.isUnused).reduce((acc, curr) => acc + curr.price, 0);
 
     const spentMonthAnimated = useCountUp(147.90);
     const unusedTotalAnimated = useCountUp(unusedTotal);
 
-    const handleCancel = (id: string, name: string, price: number) => {
+    const handleCancel = (id: string) => {
+        setSubs(subs.filter(s => s.id !== id));
+    };
+
+    const handleCancelWithToast = (id: string, name: string, price: number) => {
         toast.success(`Подписка ${name} отменена 🎉`, {
             description: `Вы сэкономили $${price}/мес`,
         });
         setSubs(subs.filter(s => s.id !== id));
+    };
+
+    const openSettings = (sub: Subscription) => {
+        setSelectedSub(sub);
+        setIsSheetOpen(true);
     };
 
     return (
@@ -150,13 +162,17 @@ export function Dashboard() {
                                             <Button
                                                 variant="destructive"
                                                 className="w-full font-medium"
-                                                onClick={() => handleCancel(sub.id, sub.name, sub.price)}
+                                                onClick={() => handleCancelWithToast(sub.id, sub.name, sub.price)}
                                             >
                                                 <XCircle className="w-4 h-4 mr-2" />
                                                 Отменить в 1 клик
                                             </Button>
                                         ) : (
-                                            <Button variant="outline" className="w-full group-hover:bg-primary/5 transition-colors">
+                                            <Button
+                                                variant="outline"
+                                                className="w-full group-hover:bg-primary/5 transition-colors"
+                                                onClick={() => openSettings(sub)}
+                                            >
                                                 Настройки
                                                 <ArrowRight className="w-4 h-4 ml-2 opacity-50 group-hover:opacity-100 transition-opacity" />
                                             </Button>
@@ -168,6 +184,13 @@ export function Dashboard() {
                     ))}
                 </div>
             </motion.div>
+
+            <SubscriptionSettingsSheet
+                sub={selectedSub}
+                open={isSheetOpen}
+                onOpenChange={setIsSheetOpen}
+                onCancel={handleCancel}
+            />
         </motion.div>
     );
 }

@@ -8,6 +8,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { toast } from 'sonner';
 import { MOCK_FAMILIES } from '@/mock/data';
 import { ServiceIcon } from '@/components/ui/ServiceIcon';
+import { CreateFamilyModal } from '@/components/features/CreateFamilyModal';
 import {
     Sheet,
     SheetContent,
@@ -32,6 +33,15 @@ export function FamilySharing() {
     const [families, setFamilies] = useState<Family[]>(MOCK_FAMILIES);
     const [selectedFamily, setSelectedFamily] = useState<Family | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+    const handleCreated = (newFamily: Omit<Family, 'id'>) => {
+        const id = `custom-${Date.now()}`;
+        setFamilies(prev => [{ ...newFamily, id } as Family, ...prev]);
+        toast.success(`Семья «${newFamily.service}» опубликована! 🎉`, {
+            description: 'Теперь другие пользователи могут к вам присоединиться.',
+        });
+    };
 
     const handleJoinClick = (family: Family) => {
         setSelectedFamily(family);
@@ -66,7 +76,7 @@ export function FamilySharing() {
                     <h1 className="text-3xl font-display font-semibold">Семейные подписки</h1>
                     <p className="text-muted-foreground mt-1">Делитесь подписками и платите меньше</p>
                 </div>
-                <Button className="font-medium hidden md:flex" size="sm">
+                <Button className="font-medium hidden md:flex" size="sm" onClick={() => setIsCreateOpen(true)}>
                     <PlusCircle className="w-4 h-4 mr-2" />
                     Создать семью
                 </Button>
@@ -223,8 +233,19 @@ export function FamilySharing() {
                 </SheetContent>
             </Sheet>
 
+            {/* Модалка создания семьи */}
+            <CreateFamilyModal
+                open={isCreateOpen}
+                onOpenChange={setIsCreateOpen}
+                onCreated={handleCreated}
+            />
+
             {/* FAB for mobile */}
-            <Button className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg shadow-primary/25 md:hidden" size="icon">
+            <Button
+                className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg shadow-primary/25 md:hidden"
+                size="icon"
+                onClick={() => setIsCreateOpen(true)}
+            >
                 <PlusCircle className="w-6 h-6" />
             </Button>
         </motion.div>

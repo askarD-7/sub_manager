@@ -1,10 +1,12 @@
-import { Bell, Search, Menu } from 'lucide-react';
+import { Search, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { NotificationsPopover } from '@/components/features/NotificationsPopover';
 
 type HeaderProps = {
     activeTab: string;
     setIsOpen: (open: boolean) => void;
+    setActiveTab?: (tab: string) => void;
 };
 
 const mapTabToTitle: Record<string, string> = {
@@ -12,9 +14,10 @@ const mapTabToTitle: Record<string, string> = {
     family: 'Семья',
     b2b: 'Команда',
     marketplace: 'Маркетплейс',
+    settings: 'Профиль',
 };
 
-export function Header({ activeTab, setIsOpen }: HeaderProps) {
+export function Header({ activeTab, setIsOpen, setActiveTab }: HeaderProps) {
     return (
         <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur">
             <div className="flex items-center gap-4">
@@ -42,12 +45,12 @@ export function Header({ activeTab, setIsOpen }: HeaderProps) {
                     />
                 </div>
 
-                <Button variant="ghost" size="icon" className="relative group">
-                    <Bell className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                    <span className="absolute top-2 right-2.5 h-2 w-2 rounded-full bg-red-500 border-2 border-background"></span>
-                </Button>
+                <NotificationsPopover />
 
-                <Avatar className="h-8 w-8 sm:hidden">
+                <Avatar
+                    className="h-8 w-8 cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all"
+                    onClick={() => setActiveTab?.('settings')}
+                >
                     <AvatarImage src="https://i.pravatar.cc/150?u=current_user" />
                     <AvatarFallback>AK</AvatarFallback>
                 </Avatar>
@@ -55,3 +58,4 @@ export function Header({ activeTab, setIsOpen }: HeaderProps) {
         </header>
     );
 }
+

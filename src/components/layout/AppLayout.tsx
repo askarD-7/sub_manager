@@ -22,7 +22,7 @@ export function AppLayout({ children, activeTab, setActiveTab }: AppLayoutProps)
             />
 
             <div className="flex flex-1 flex-col overflow-hidden relative">
-                <Header activeTab={activeTab} setIsOpen={setIsSidebarOpen} />
+                <Header activeTab={activeTab} setIsOpen={setIsSidebarOpen} setActiveTab={setActiveTab} />
 
                 <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background/50 p-4 md:p-8">
                     {children}
